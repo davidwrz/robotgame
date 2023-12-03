@@ -1,35 +1,25 @@
 package au.entsia.game;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static au.entsia.game.PositionValidator.isRobotPositionValid;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class PositionValidatorTest {
 
-    @Test
-    void shouldReturnTrueWhenPositionIsOnBoard() {
-        //given
-        int x = 0;
-        int y = 0;
-        int horizontalSize = 5;
-        int verticalSize = 5;
-        //when
+    @ParameterizedTest
+    @CsvSource({
+            "0, 0, 5, 5, true",   // On the board
+            "6, 5, 5, 5, false",  // Out of bounds in X
+            "4, 6, 5, 5, false",  // Out of bounds in Y
+            "-1, 3, 5, 5, false", // Negative X
+            "3, -1, 5, 5, false"  // Negative Y
+    })
+    void shouldValidateRobotPosition(int x, int y, int horizontalSize, int verticalSize, boolean expectedResult) {
+        // when
         boolean validationResult = isRobotPositionValid(x, y, horizontalSize, verticalSize);
-        //then
-        assertTrue(validationResult);
-    }
-
-    @Test
-    void shouldReturnFalseWhenPositionIsOutOfBoard() {
-        //given
-        int x = 6;
-        int y = 5;
-        int horizontalSize = 5;
-        int verticalSize = 5;
-        //when
-        boolean validationResult = isRobotPositionValid(x, y, horizontalSize, verticalSize);
-        //then
-        assertTrue(validationResult);
+        // then
+        assertEquals(expectedResult, validationResult);
     }
 }

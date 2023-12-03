@@ -3,11 +3,16 @@ package au.entsia.game;
 class PositionValidator {
 
     public static boolean isRobotPositionValid(int x, int y, int horizontalSize, int verticalSize) {
-        return isPositionInBound(x, y, horizontalSize, verticalSize)
-                && AreCoordinatesBiggerThanZero(x, y);
+        if (x <0 || y < 0) {
+            return false;
+        } if (x > horizontalSize || y > verticalSize) {
+            return false;
+        }
+        return true;
+//        return isPositionInBound(x, y, horizontalSize, verticalSize) && areCoordinatesBiggerOrEqualThanZero(x, y);
     }
 
-    private static boolean AreCoordinatesBiggerThanZero(int x, int y) {
+    private static boolean areCoordinatesBiggerOrEqualThanZero(int x, int y) {
         return x < 0 || y < 0;
     }
 

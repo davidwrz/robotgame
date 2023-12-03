@@ -19,6 +19,10 @@ public class Robot {
         return y;
     }
 
+    public String getFacing() {
+        return facing.toString();
+    }
+
     public void rotateRight() {
         facing = facing.turnRight();
         System.out.println("Robot rotated right");
@@ -44,10 +48,5 @@ public class Robot {
         this.x = x;
         this.y = y;
         this.facing = Facing.valueOf(facing);
-    }
-
-
-    public String getPosition() {
-        return String.format("%d,%d,%s", x, y, facing.toString());
     }
 }
