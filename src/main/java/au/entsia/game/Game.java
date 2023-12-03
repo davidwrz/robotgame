@@ -3,22 +3,25 @@ package au.entsia.game;
 import au.entsia.robot.Robot;
 import au.entsia.util.InputReader;
 
+import java.util.logging.Logger;
+
 import static au.entsia.game.PositionValidator.isRobotPositionValid;
 
 public class Game {
 
-    private final InputReader inputReader = new InputReader();
-    private final int VERTICAL_SIZE = 5;
-    private final int HORIZONTAL_SIZE = 5;
-    private static final String PLACE = "PLACE";
+    private static final String PLACE_COMMAND = "PLACE";
+    private final InputReader inputReader;
+    private final Logger logger;
     private Robot robot;
 
-    public Game() {
+    public Game(InputReader inputReader) {
+        this.inputReader = inputReader;
+        logger = Logger.getLogger(Game.class.getName());
         play();
     }
 
     public void play() {
-        startByFirstCommand();
+        triggerPlacingRobot();
 
         while (true) {
             String command = inputReader.getInput();
@@ -31,75 +34,83 @@ public class Game {
                     case "LEFT" -> rotateRobot(RotateOrder.LEFT);
                     case "REPORT" -> printOutput();
                     case "EXIT" -> exitGame();
+                    default -> logger.info(String.format("Unknown command: %s", command));
                 }
             }
         }
+//        System.out.println("test end");
     }
 
-    private void exitGame() {
-        inputReader.close();
-        System.exit(0);
-    }
-
-    private void rotateRobot(RotateOrder direction) {
-        if (direction.equals(RotateOrder.RIGHT)) {
-            robot.rotateRight();
-        } else {
-            robot.rotateLeft();
-        }
-    }
-
-    private void moveRobot() {
-        int x = robot.getX();
-        int y = robot.getY();
-        String facing = robot.getFacing();
-        switch (facing) {
-            case "NORTH" -> y++;
-            case "SOUTH" -> y--;
-            case "EAST" -> x++;
-            case "WEST" -> x--;
-        }
-        if (isRobotPositionValid(x, y, HORIZONTAL_SIZE, VERTICAL_SIZE))
-            robot.move();
-    }
-
-    private void printOutput() {
-        String result = String.format("%d,%d,%s", robot.getX(), robot.getY(), robot.getFacing());
-        System.out.println("Output: " + result);
-    }
-
-    private void placeRobot(String input) {
-        String[] coordinates = getCoordinates(input);
-        int horizontalCoordinate = Integer.parseInt(coordinates[0]);
-        int verticalCoordinate = Integer.parseInt(coordinates[1]);
-        String facing = coordinates[2];
-        robot.place(horizontalCoordinate, verticalCoordinate, facing);
-    }
-
-    private void startByFirstCommand() {
+    private void triggerPlacingRobot() {
         String input;
         while (true) {
             input = inputReader.getInput();
-            if (input.contains(PLACE)) {
+            if (input.contains(PLACE_COMMAND)) {
                 String[] coordinates = getCoordinates(input);
                 int horizontalCoordinate = Integer.parseInt(coordinates[0]);
                 int verticalCoordinate = Integer.parseInt(coordinates[1]);
                 String facing = coordinates[2];
-                if (isPositionValid(horizontalCoordinate, verticalCoordinate)) {
+                if (isRobotPositionValid(horizontalCoordinate, verticalCoordinate)) {
                     createRobot(horizontalCoordinate, verticalCoordinate, facing);
-                    System.out.println("Robot initialized");
+                    logger.info("Robot initialized");
                     return;
                 }
             }
         }
     }
 
-    private void createRobot(int x, int y, String facing) {
-        robot = new Robot(x, y, facing);
+    void placeRobot(String input) {
+        String[] coordinates = getCoordinates(input);
+        int horizontalCoordinate = Integer.parseInt(coordinates[0]);
+        int verticalCoordinate = Integer.parseInt(coordinates[1]);
+        String facing = coordinates[2];
+        robot.place(horizontalCoordinate, verticalCoordinate, facing);
+        logger.info(String.format("Robot placed: %d,%d,%s",
+                robot.getHorizontalCoordinate(),
+                robot.getVerticalCoordinate(),
+                robot.getFacing()));
     }
 
-    private boolean isPositionValid(int x, int y) {
-        return isRobotPositionValid(x, y, HORIZONTAL_SIZE, VERTICAL_SIZE);
+    void moveRobot() {
+        int horizontalCoordinate = robot.getHorizontalCoordinate();
+        int verticalCoordinate = robot.getVerticalCoordinate();
+        String facing = robot.getFacing();
+        switch (facing) {
+            case "NORTH" -> verticalCoordinate++;
+            case "SOUTH" -> verticalCoordinate--;
+            case "EAST" -> horizontalCoordinate++;
+            case "WEST" -> horizontalCoordinate--;
+        }
+        if (isRobotPositionValid(horizontalCoordinate, verticalCoordinate)) {
+            robot.move();
+            logger.info(String.format("Robot moved: %s", facing));
+        }
+    }
+
+    void rotateRobot(RotateOrder direction) {
+        if (direction.equals(RotateOrder.RIGHT)) {
+            robot.rotateRight();
+        } else {
+            robot.rotateLeft();
+        }
+        logger.info(String.format("Robot rotated: %s", direction));
+    }
+
+    void printOutput() {
+        String result = String.format("Output: %d,%d,%s",
+                robot.getHorizontalCoordinate(),
+                robot.getVerticalCoordinate(),
+                robot.getFacing());
+        System.out.println(result);
+    }
+
+    void exitGame() {
+        inputReader.close();
+        System.exit(0);
+    }
+
+    private void createRobot(int horizontalCoordinate, int verticalCoordinate, String facing) {
+        robot = new Robot(horizontalCoordinate, verticalCoordinate, facing);
     }
 
     private String[] getCoordinates(String place) {

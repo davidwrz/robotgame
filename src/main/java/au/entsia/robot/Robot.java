@@ -1,22 +1,22 @@
 package au.entsia.robot;
 
 public class Robot {
-    private int x;
-    private int y;
+    private int horizontalCoordinate;
+    private int verticalCoordinate;
     private Facing facing;
 
-    public Robot(int x, int y, String facing) {
-        this.x = x;
-        this.y = y;
+    public Robot(int horizontalCoordinate, int verticalCoordinate, String facing) {
+        this.horizontalCoordinate = horizontalCoordinate;
+        this.verticalCoordinate = verticalCoordinate;
         this.facing = Facing.valueOf(facing);
     }
 
-    public int getX() {
-        return x;
+    public int getHorizontalCoordinate() {
+        return horizontalCoordinate;
     }
 
-    public int getY() {
-        return y;
+    public int getVerticalCoordinate() {
+        return verticalCoordinate;
     }
 
     public String getFacing() {
@@ -25,28 +25,24 @@ public class Robot {
 
     public void rotateRight() {
         facing = facing.turnRight();
-        System.out.println("Robot rotated right");
     }
 
     public void rotateLeft() {
         facing = facing.turnLeft();
-        System.out.println("Robot rotated left");
-
     }
 
     public void move() {
         switch (facing) {
-            case NORTH -> y++;
-            case SOUTH -> y--;
-            case EAST -> x++;
-            case WEST -> x--;
+            case NORTH -> verticalCoordinate++;
+            case SOUTH -> verticalCoordinate--;
+            case EAST -> horizontalCoordinate++;
+            case WEST -> horizontalCoordinate--;
         }
-        System.out.println("Robot moved " + facing);
     }
 
-    public void place(int x, int y, String facing) {
-        this.x = x;
-        this.y = y;
+    public void place(int horizontalCoordinate, int verticalCoordinate, String facing) {
+        this.horizontalCoordinate = horizontalCoordinate;
+        this.verticalCoordinate = verticalCoordinate;
         this.facing = Facing.valueOf(facing);
     }
 }
