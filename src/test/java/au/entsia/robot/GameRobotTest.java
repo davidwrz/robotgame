@@ -5,7 +5,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class RobotTest {
+class GameRobotTest {
 
     @ParameterizedTest
     @CsvSource({
@@ -16,15 +16,15 @@ class RobotTest {
     })
     void testPlace(int horizontal, int vertical, String facing, String expectedFacing) {
         // given
-        Robot robot = new Robot(0, 0, Facing.NORTH.toString());
+        GameRobot gameRobot = new GameRobot(0, 0, Facing.NORTH.toString());
 
         // when
-        robot.place(horizontal, vertical, facing);
+        gameRobot.place(horizontal, vertical, facing);
 
         // then
-        assertEquals(horizontal, robot.getHorizontalCoordinate());
-        assertEquals(vertical, robot.getVerticalCoordinate());
-        assertEquals(expectedFacing, robot.getFacing());
+        assertEquals(horizontal, gameRobot.getHorizontalCoordinate());
+        assertEquals(vertical, gameRobot.getVerticalCoordinate());
+        assertEquals(expectedFacing, gameRobot.getFacing());
     }
 
     @ParameterizedTest
@@ -37,14 +37,14 @@ class RobotTest {
     void testMove(int initialHorizontal, int initialVertical, String facing,
                   int expectedHorizontal, int expectedVertical) {
         // given
-        Robot robot = new Robot(initialHorizontal, initialVertical, facing);
+        GameRobot gameRobot = new GameRobot(initialHorizontal, initialVertical, facing);
 
         // when
-        robot.move();
+        gameRobot.move();
 
         // then
-        assertEquals(expectedHorizontal, robot.getHorizontalCoordinate());
-        assertEquals(expectedVertical, robot.getVerticalCoordinate());
+        assertEquals(expectedHorizontal, gameRobot.getHorizontalCoordinate());
+        assertEquals(expectedVertical, gameRobot.getVerticalCoordinate());
     }
 
     @ParameterizedTest
@@ -56,13 +56,13 @@ class RobotTest {
     })
     void testRotateRight(Facing initialFacing, Facing expectedFacing) {
         // given
-        Robot robot = new Robot(0, 0, initialFacing.toString());
+        GameRobot gameRobot = new GameRobot(0, 0, initialFacing.toString());
 
         // when
-        robot.rotateRight();
+        gameRobot.rotateRight();
 
         // then
-        assertEquals(expectedFacing, Facing.valueOf(robot.getFacing()));
+        assertEquals(expectedFacing, Facing.valueOf(gameRobot.getFacing()));
     }
 
     @ParameterizedTest
@@ -74,12 +74,12 @@ class RobotTest {
     })
     void testRotateLeft(Facing initialFacing, Facing expectedFacing) {
         // given
-        Robot robot = new Robot(0, 0, initialFacing.toString());
+        GameRobot gameRobot = new GameRobot(0, 0, initialFacing.toString());
 
         // when
-        robot.rotateLeft();
+        gameRobot.rotateLeft();
 
         // then
-        assertEquals(expectedFacing, Facing.valueOf(robot.getFacing()));
+        assertEquals(expectedFacing, Facing.valueOf(gameRobot.getFacing()));
     }
 }

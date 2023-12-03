@@ -1,6 +1,7 @@
 package au.entsia.game;
 
-import au.entsia.robot.Robot;
+import au.entsia.robot.AbstractRobot;
+import au.entsia.robot.GameRobot;
 import au.entsia.util.InputReader;
 
 import java.util.logging.Logger;
@@ -12,18 +13,22 @@ public class Game {
     private static final String PLACE_COMMAND = "PLACE";
     private final InputReader inputReader;
     private final Logger logger;
-    private Robot robot;
+    private GameRobot robot;
+    private boolean gameRunning = true;
 
     public Game(InputReader inputReader) {
         this.inputReader = inputReader;
         logger = Logger.getLogger(Game.class.getName());
-        play();
+    }
+
+    public void setRobot(GameRobot gameRobot) {
+        this.robot = gameRobot;
     }
 
     public void play() {
         triggerPlacingRobot();
 
-        while (true) {
+        while (gameRunning) {
             String command = inputReader.getInput();
             if (command.startsWith("PLACE ")) {
                 placeRobot(command);
@@ -38,7 +43,6 @@ public class Game {
                 }
             }
         }
-//        System.out.println("test end");
     }
 
     private void triggerPlacingRobot() {
@@ -105,12 +109,12 @@ public class Game {
     }
 
     void exitGame() {
+        gameRunning = false;
         inputReader.close();
-        System.exit(0);
     }
 
     private void createRobot(int horizontalCoordinate, int verticalCoordinate, String facing) {
-        robot = new Robot(horizontalCoordinate, verticalCoordinate, facing);
+        robot = new GameRobot(horizontalCoordinate, verticalCoordinate, facing);
     }
 
     private String[] getCoordinates(String place) {

@@ -1,11 +1,11 @@
 package au.entsia.robot;
 
-public class Robot {
+public class GameRobot {
     private int horizontalCoordinate;
     private int verticalCoordinate;
     private Facing facing;
 
-    public Robot(int horizontalCoordinate, int verticalCoordinate, String facing) {
+    public GameRobot(int horizontalCoordinate, int verticalCoordinate, String facing) {
         this.horizontalCoordinate = horizontalCoordinate;
         this.verticalCoordinate = verticalCoordinate;
         this.facing = Facing.valueOf(facing);

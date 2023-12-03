@@ -1,6 +1,6 @@
 package au.entsia.game;
 
-import au.entsia.robot.Robot;
+import au.entsia.robot.GameRobot;
 import au.entsia.util.InputReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,12 +9,12 @@ import static org.mockito.Mockito.*;
 
 class GameTest {
 
-    private Robot robot;
+    private GameRobot gameRobot;
     private InputReader inputReader;
 
     @BeforeEach
     void init() {
-        robot = mock(Robot.class);
+        gameRobot = mock(GameRobot.class);
         inputReader = mock(InputReader.class);
     }
 
@@ -24,11 +24,12 @@ class GameTest {
         when(inputReader.getInput()).thenReturn("PLACE 1,1,NORTH").thenReturn("MOVE").thenReturn("EXIT");
         Game game = new Game(inputReader);
         // when
-        when(robot.getHorizontalCoordinate()).thenReturn(1);
-        when(robot.getVerticalCoordinate()).thenReturn(1);
-        when(robot.getFacing()).thenReturn("NORTH");
+        when(gameRobot.getHorizontalCoordinate()).thenReturn(1);
+        when(gameRobot.getVerticalCoordinate()).thenReturn(1);
+        when(gameRobot.getFacing()).thenReturn("NORTH");
+        game.setRobot(gameRobot);
         game.moveRobot();
         // then
-        verify(robot).move();
+        verify(gameRobot).move();
     }
 }
