@@ -1,9 +1,8 @@
-package au.entsia.util;
+package au.entsia.input;
 
 import java.util.Scanner;
 
 public class InputReader {
-
     private static final Scanner SCANNER = new Scanner(System.in);
 
     public String getInput() {

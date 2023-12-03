@@ -1,7 +1,7 @@
 package au.entsia.game;
 
 import au.entsia.robot.Robot;
-import au.entsia.util.InputReader;
+import au.entsia.input.InputReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

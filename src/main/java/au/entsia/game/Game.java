@@ -1,15 +1,16 @@
 package au.entsia.game;
 
+import au.entsia.input.Command;
+import au.entsia.input.CommandService;
+import au.entsia.input.InputReader;
 import au.entsia.robot.Robot;
-import au.entsia.util.InputReader;
 
 import java.util.logging.Logger;
 
 import static au.entsia.game.PositionValidator.isRobotPositionValid;
+import static au.entsia.input.Command.PLACE;
 
 public class Game {
-
-    private static final String PLACE_COMMAND = "PLACE";
     private final InputReader inputReader;
     private final Logger logger;
     private final Robot robot;
@@ -25,18 +26,16 @@ public class Game {
         triggerPlacingRobot();
 
         while (gameRunning) {
-            String command = inputReader.getInput();
-            if (command.startsWith(PLACE_COMMAND)) {
-                placeRobot(command);
-            } else {
-                switch (command) {
-                    case "MOVE" -> moveRobot();
-                    case "RIGHT" -> rotateRobot(RotateOrder.RIGHT);
-                    case "LEFT" -> rotateRobot(RotateOrder.LEFT);
-                    case "REPORT" -> printOutput();
-                    case "EXIT" -> exitGame();
-                    default -> logger.info(String.format("Unknown command: %s", command));
-                }
+            String input = inputReader.getInput();
+            Command command = CommandService.getCommand(input);
+            switch (command) {
+                case PLACE -> placeRobot(input);
+                case MOVE -> moveRobot();
+                case RIGHT -> rotateRobot(RotateOrder.RIGHT);
+                case LEFT -> rotateRobot(RotateOrder.LEFT);
+                case REPORT -> printOutput();
+                case EXIT -> exitGame();
+                case UNKNOWN -> logger.info(String.format("Unknown command: %s", input));
             }
         }
     }
@@ -45,7 +44,7 @@ public class Game {
         String input;
         while (true) {
             input = inputReader.getInput();
-            if (input.startsWith(PLACE_COMMAND)) {
+            if (input.startsWith(PLACE.toString())) {
                 placeRobot(input);
                 return;
             }
@@ -59,7 +58,10 @@ public class Game {
         String facing = coordinates[2];
         if (isRobotPositionValid(horizontalCoordinate, verticalCoordinate)) {
             robot.place(horizontalCoordinate, verticalCoordinate, facing);
-            logger.info("Robot placed: ");
+            logger.info(String.format("Robot placed: %d,%d,%s",
+                    robot.getHorizontalCoordinate(),
+                    robot.getVerticalCoordinate(),
+                    robot.getFacing()));
         }
     }
 
