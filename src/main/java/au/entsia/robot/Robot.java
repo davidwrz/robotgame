@@ -5,12 +5,6 @@ public class Robot {
     private int verticalCoordinate;
     private Facing facing;
 
-    public Robot(int horizontalCoordinate, int verticalCoordinate, String facing) {
-        this.horizontalCoordinate = horizontalCoordinate;
-        this.verticalCoordinate = verticalCoordinate;
-        this.facing = Facing.valueOf(facing);
-    }
-
     public int getHorizontalCoordinate() {
         return horizontalCoordinate;
     }

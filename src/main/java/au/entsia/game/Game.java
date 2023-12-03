@@ -12,16 +12,13 @@ public class Game {
     private static final String PLACE_COMMAND = "PLACE";
     private final InputReader inputReader;
     private final Logger logger;
-    private Robot robot;
+    private final Robot robot;
     private boolean gameRunning = true;
 
-    public Game(InputReader inputReader) {
+    public Game(Robot robot, InputReader inputReader) {
+        this.robot = robot;
         this.inputReader = inputReader;
         logger = Logger.getLogger(Game.class.getName());
-    }
-
-    public void setRobot(Robot robot) {
-        this.robot = robot;
     }
 
     public void play() {
@@ -29,7 +26,7 @@ public class Game {
 
         while (gameRunning) {
             String command = inputReader.getInput();
-            if (command.startsWith("PLACE ")) {
+            if (command.startsWith(PLACE_COMMAND)) {
                 placeRobot(command);
             } else {
                 switch (command) {
@@ -48,16 +45,9 @@ public class Game {
         String input;
         while (true) {
             input = inputReader.getInput();
-            if (input.contains(PLACE_COMMAND)) {
-                String[] coordinates = getCoordinates(input);
-                int horizontalCoordinate = Integer.parseInt(coordinates[0]);
-                int verticalCoordinate = Integer.parseInt(coordinates[1]);
-                String facing = coordinates[2];
-                if (isRobotPositionValid(horizontalCoordinate, verticalCoordinate)) {
-                    createRobot(horizontalCoordinate, verticalCoordinate, facing);
-                    logger.info("Robot initialized");
-                    return;
-                }
+            if (input.startsWith(PLACE_COMMAND)) {
+                placeRobot(input);
+                return;
             }
         }
     }
@@ -67,11 +57,10 @@ public class Game {
         int horizontalCoordinate = Integer.parseInt(coordinates[0]);
         int verticalCoordinate = Integer.parseInt(coordinates[1]);
         String facing = coordinates[2];
-        robot.place(horizontalCoordinate, verticalCoordinate, facing);
-        logger.info(String.format("Robot placed: %d,%d,%s",
-                robot.getHorizontalCoordinate(),
-                robot.getVerticalCoordinate(),
-                robot.getFacing()));
+        if (isRobotPositionValid(horizontalCoordinate, verticalCoordinate)) {
+            robot.place(horizontalCoordinate, verticalCoordinate, facing);
+            logger.info("Robot placed: ");
+        }
     }
 
     void moveRobot() {
@@ -110,10 +99,7 @@ public class Game {
     void exitGame() {
         gameRunning = false;
         inputReader.close();
-    }
-
-    private void createRobot(int horizontalCoordinate, int verticalCoordinate, String facing) {
-        robot = new Robot(horizontalCoordinate, verticalCoordinate, facing);
+        logger.info("End of the game");
     }
 
     private String[] getCoordinates(String place) {

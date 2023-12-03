@@ -16,7 +16,8 @@ class RobotTest {
     })
     void testPlace(int horizontal, int vertical, String facing, String expectedFacing) {
         // given
-        Robot robot = new Robot(0, 0, Facing.NORTH.toString());
+        Robot robot = new Robot();
+        robot.place(0, 0, facing);
 
         // when
         robot.place(horizontal, vertical, facing);
@@ -37,7 +38,8 @@ class RobotTest {
     void testMove(int initialHorizontal, int initialVertical, String facing,
                   int expectedHorizontal, int expectedVertical) {
         // given
-        Robot robot = new Robot(initialHorizontal, initialVertical, facing);
+        Robot robot = new Robot();
+        robot.place(initialHorizontal, initialVertical, facing);
 
         // when
         robot.move();
@@ -56,7 +58,8 @@ class RobotTest {
     })
     void testRotateRight(Facing initialFacing, Facing expectedFacing) {
         // given
-        Robot robot = new Robot(0, 0, initialFacing.toString());
+        Robot robot = new Robot();
+        robot.place(0, 0, initialFacing.toString());
 
         // when
         robot.rotateRight();
@@ -74,7 +77,8 @@ class RobotTest {
     })
     void testRotateLeft(Facing initialFacing, Facing expectedFacing) {
         // given
-        Robot robot = new Robot(0, 0, initialFacing.toString());
+        Robot robot = new Robot();
+        robot.place(0, 0, initialFacing.toString());
 
         // when
         robot.rotateLeft();
