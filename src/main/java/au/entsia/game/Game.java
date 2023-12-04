@@ -52,7 +52,7 @@ public class Game {
     }
 
     void placeRobot(String input) {
-        String[] coordinates = getCoordinates(input);
+        String[] coordinates = input.split(" ")[1].split(",");
         int horizontalCoordinate = Integer.parseInt(coordinates[0]);
         int verticalCoordinate = Integer.parseInt(coordinates[1]);
         String facing = coordinates[2];
@@ -90,23 +90,18 @@ public class Game {
         logger.info(String.format("Robot rotated: %s", direction));
     }
 
-    void printOutput() {
+    String printOutput() {
         String result = String.format("Output: %d,%d,%s",
                 robot.getHorizontalCoordinate(),
                 robot.getVerticalCoordinate(),
                 robot.getFacing());
         System.out.println(result);
+        return result;
     }
 
     void exitGame() {
         gameRunning = false;
         inputReader.close();
         logger.info("End of the game");
-    }
-
-    private String[] getCoordinates(String place) {
-        return place
-                .split(" ")[1]
-                .split(",");
     }
 }
